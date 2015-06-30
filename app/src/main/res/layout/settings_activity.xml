@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- One of the solutions from
+    http://stackoverflow.com/questions/26564400/creating-a-preference-screen-with-support-v21-toolbar
+    to have a Toolbar (Material look and feel) in our SettingsActivity down to API 7
+    This will not work for nested screens (I actually wrote a small library that fixes that:
+    https://github.com/ferrannp/material-preferences) but for this project, this solution is
+    enough -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <!-- With applying this theme we also get the white material back arrow -->
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp" >
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+</LinearLayout>

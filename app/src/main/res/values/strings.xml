@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Spotify Streamer</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="search_hint">Search for an artist</string>
+    <string name="top_10_tracks">Top 10 Tracks</string>
+    <string name="no_results_found">No results found for "\u0022"%1$s"\u0022"</string>
+    <string name="refine_search">Please refine your search.</string>
+
+    <!-- Preferences -->
+    <string name="pref_country_label">Top tracks country</string>
+
+    <!-- Accesibility -->
+    <string name="accessibility_artist_thumbnail">This is the artist cover thumbnail image.</string>
+    <string name="accessibility_track_thumbnail">This is the album thumbnail.</string>
+
+    <!-- No translatable -->
+    <string name="artist_id" translatable="false">artist_id</string>
+    <string name="artist_name_id" translatable="false">artist_name_id</string>
+    <string name="query_country" translatable="false">country</string>
+    <string name="pref_country_key" translatable="false">country_key</string>
+    <string name="pref_country_default" translatable="false">US</string>
+
+</resources>

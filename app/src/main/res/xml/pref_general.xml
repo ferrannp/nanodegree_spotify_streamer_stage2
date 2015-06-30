@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- In a production code, we could check that the user has enter a valid Country. Right now,
+    if the user does that, she/he will see an error message (400 Invalid country code) when trying
+    to query for a list of Ten Top Tracks -->
+    <EditTextPreference
+        android:title="@string/pref_country_label"
+        android:key="@string/pref_country_key"
+        android:defaultValue="@string/pref_country_default"
+        android:inputType="text"
+        android:singleLine="true"
+        android:maxLength="2"/>
+
+</PreferenceScreen>
