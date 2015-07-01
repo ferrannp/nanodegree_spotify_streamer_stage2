@@ -43,15 +43,13 @@ public class NetworkFragment extends Fragment {
     private String mCurrentArtist = "";
 
     public interface onArtistsResult {
-        void onNetworkSuccess();
-
-        void onNetworkError(String message);
+        void onArtistsSuccess();
+        void onArtistsError(String message);
     }
 
     public interface onTracksResult {
-        void onNetworkSuccess();
-
-        void onNetworkError(String message);
+        void onTracksSuccess();
+        void onTracksError(String message);
     }
 
     public void setOnArtistsResult(onArtistsResult listener) {
@@ -111,7 +109,7 @@ public class NetworkFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         if (onArtistsResult != null) {
-                            onArtistsResult.onNetworkSuccess();
+                            onArtistsResult.onArtistsSuccess();
                         }
                     }
                 });
@@ -129,7 +127,7 @@ public class NetworkFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         if (onArtistsResult != null) {
-                            onArtistsResult.onNetworkError(error.getMessage());
+                            onArtistsResult.onArtistsError(error.getMessage());
                         }
                     }
                 });
@@ -165,7 +163,7 @@ public class NetworkFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         if (onTracksResult != null) {
-                            onTracksResult.onNetworkSuccess();
+                            onTracksResult.onTracksSuccess();
                         }
                     }
                 });
@@ -179,7 +177,7 @@ public class NetworkFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         if (onTracksResult != null) {
-                            onTracksResult.onNetworkError(spotifyError.getMessage());
+                            onTracksResult.onTracksError(spotifyError.getMessage());
                         }
                     }
                 });

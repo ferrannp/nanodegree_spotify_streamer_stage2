@@ -21,6 +21,7 @@ public class TopTracksFragment extends Fragment{
     private TopTracksAdapter topTracksAdapter;
     private LinearLayout mWarningView;
     private TextView mWarningTitle, mWarningMessage;
+    private String mArtistName;
 
     public TopTracksFragment() {
     }
@@ -50,13 +51,22 @@ public class TopTracksFragment extends Fragment{
         super.onActivityCreated(savedInstanceState);
 
         if(savedInstanceState == null) { //Only needed the first time
-            MainActivity.getNetworkFragment().searchTopTracks
-                    (((TopTracksActivity) getActivity()).getArtistId());
+            Bundle args = getArguments();
+            String artistId;
+            if(args != null) {
+                artistId = args.getString(getString(R.string.artist_id));
+                mArtistName = args.getString(getString(R.string.artist_name_id));
+            }else  {
+                artistId = ((TopTracksActivity) getActivity()).getArtistId();
+                mArtistName = ((TopTracksActivity) getActivity()).getArtistName();
+            }
+
+            MainActivity.getNetworkFragment().searchTopTracks(artistId);
         }
     }
 
     private void addTopTracks(){
-        List<Track> trackList = ((TopTracksActivity) getActivity()).getTopTracksList();
+        List<Track> trackList = MainActivity.getNetworkFragment().getTopTracksList();
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
             topTracksAdapter.addAll(trackList);
         } else {
@@ -67,11 +77,9 @@ public class TopTracksFragment extends Fragment{
     }
 
     public void onNetworkSuccess(){
-
-        List<Track> trackList = ((TopTracksActivity) getActivity()).getTopTracksList();
+        List<Track> trackList = MainActivity.getNetworkFragment().getTopTracksList();
         if(trackList.size() == 0){
-            mWarningTitle.setText(String.format(getString(R.string.no_results_found),
-                    ((TopTracksActivity) getActivity()).getArtistName()));
+            mWarningTitle.setText(String.format(getString(R.string.no_results_found), mArtistName));
             mWarningView.setVisibility(View.VISIBLE);
             mWarningMessage.setVisibility(View.GONE); //No need to redefine the search here
         }
@@ -81,8 +89,7 @@ public class TopTracksFragment extends Fragment{
     }
 
     public void onNetworkError(String message){
-        mWarningTitle.setText(String.format(getString(R.string.no_results_found),
-                ((TopTracksActivity) getActivity()).getArtistName()));
+        mWarningTitle.setText(String.format(getString(R.string.no_results_found), mArtistName));
         mWarningMessage.setText(message);
 
         mWarningView.setVisibility(View.VISIBLE);

@@ -1,6 +1,6 @@
 package com.fnp.spotifystreamerstage2;
 
-import android.content.Intent;
+import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,8 +30,19 @@ public class ArtistFragment extends Fragment {
     private EditText mSearchEditText;
     private LinearLayout mWarningView;
     private TextView mWarningTitle, mWarningMessage;
+    private ArtistSelectedCallback mArtistSelectedCallback;
 
     public ArtistFragment() {
+    }
+
+    public interface ArtistSelectedCallback{
+        void onArtistSelected(String id, String name);
+    }
+
+    @Override
+    public void onAttach (Activity activity){
+        super.onAttach(activity);
+        mArtistSelectedCallback = (ArtistSelectedCallback) getActivity();
     }
 
     @Override
@@ -81,12 +92,18 @@ public class ArtistFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Artist artist = mArtistArrayAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), TopTracksActivity.class);
-                intent.putExtra(getString(R.string.artist_id), artist.id);
-                intent.putExtra(getString(R.string.artist_name_id), artist.name); //For the subtitle
-                startActivity(intent);
+
+                if (mArtistSelectedCallback != null) { //Tablet
+                    mArtistSelectedCallback.onArtistSelected(artist.id, artist.name);
+                }
             }
         });
+    }
+
+    @Override
+    public void onDetach (){
+        super.onDetach();
+        mArtistSelectedCallback = null;
     }
 
     private void addArtists(){

@@ -4,11 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import java.util.List;
-
-import kaaes.spotify.webapi.android.models.Track;
-
-public class TopTracksActivity extends AppCompatActivity implements NetworkFragment.onTracksResult{
+public class TopTracksActivity extends AppCompatActivity implements NetworkFragment.onTracksResult {
 
     private String artistId, artistName;
     private TopTracksFragment topTracksFragment;
@@ -60,17 +56,13 @@ public class TopTracksActivity extends AppCompatActivity implements NetworkFragm
         return artistName;
     }
 
-    public List<Track> getTopTracksList(){
-        return MainActivity.getNetworkFragment().getTopTracksList();
-    }
-
     @Override
-    public void onNetworkSuccess() {
+    public void onTracksSuccess() {
         topTracksFragment.onNetworkSuccess();
     }
 
     @Override
-    public void onNetworkError(String message) {
+    public void onTracksError(String message) {
         topTracksFragment.onNetworkError(message);
     }
 }
