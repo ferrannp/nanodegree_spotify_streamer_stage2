@@ -6,11 +6,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fnp.spotifystreamerstage2.adapters.TopTracksAdapter;
+import com.fnp.spotifystreamerstage2.player.PlayerDialogFragment;
 
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class TopTracksFragment extends Fragment{
     private LinearLayout mWarningView;
     private TextView mWarningTitle, mWarningMessage;
     private String mArtistName;
+    private ListView mListView;
 
     public TopTracksFragment() {
     }
@@ -31,7 +34,7 @@ public class TopTracksFragment extends Fragment{
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_top_tracks, container, false);
-        ListView mListView = (ListView) v.findViewById(R.id.listview);
+        mListView = (ListView) v.findViewById(R.id.listview);
         mWarningView = (LinearLayout) v.findViewById(R.id.warning_view);
         mWarningTitle = (TextView) v.findViewById(R.id.warning_title);
         mWarningMessage = (TextView) v.findViewById(R.id.warning_message);
@@ -63,6 +66,14 @@ public class TopTracksFragment extends Fragment{
 
             MainActivity.getNetworkFragment().searchTopTracks(artistId);
         }
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                PlayerDialogFragment.newInstance()
+                        .show(getActivity().getSupportFragmentManager(), "PlayerDialog");
+            }
+        });
     }
 
     private void addTopTracks(){

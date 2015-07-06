@@ -2,6 +2,7 @@ package com.fnp.spotifystreamerstage2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -134,5 +135,18 @@ public class MainActivity extends AppCompatActivity implements NetworkFragment.o
     private TopTracksFragment getTopTracksFragment() {
        return (TopTracksFragment) getSupportFragmentManager()
                .findFragmentByTag(TOP_TRACKS_FRAGMENT_TAG);
+    }
+
+    public boolean isTwoPane(){
+        return mTwoPane;
+    }
+
+    //Simply remove the fragment if exists
+    public void clearTracks(){
+        Fragment fragment = getTopTracksFragment();
+        if(fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .remove(getTopTracksFragment()).commit();
+        }
     }
 }

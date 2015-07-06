@@ -77,8 +77,13 @@ public class ArtistFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //This condition will avoid query for the same in cases like a device rotation
-                if(!s.toString().equals(MainActivity.getNetworkFragment().getCurrentArtistName())) {
+                if (!s.toString().equals(MainActivity.getNetworkFragment().getCurrentArtistName())) {
                     MainActivity.getNetworkFragment().searchArtists(s.toString());
+                    if (((MainActivity) getActivity()).isTwoPane()) {
+                        //If user types while an artist has been selected, we want to clean the
+                        //Top tracks panel so it looks consistent
+                        ((MainActivity) getActivity()).clearTracks();
+                    }
                 }
             }
 
@@ -119,6 +124,9 @@ public class ArtistFragment extends Fragment {
     public void onNetworkSuccess(){
 
         mArtistArrayAdapter.clear(); //Clear old values
+        if(((MainActivity)getActivity()).isTwoPane()){
+            mListView.clearChoices(); //Clear choices (if there are)
+        }
         addArtists();
 
         if(mArtistArrayAdapter.getCount() == 0){
@@ -138,6 +146,9 @@ public class ArtistFragment extends Fragment {
 
     public void onNetworkError(String message){
         mArtistArrayAdapter.clear();
+        if(((MainActivity)getActivity()).isTwoPane()){
+            mListView.clearChoices(); //Clear choices (if there are)
+        }
 
         if(mSearchEditText.length() > 0){
             mWarningTitle.setText(String.format(getString(R.string.no_results_found),

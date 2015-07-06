@@ -13,4 +13,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ArtistListStyle">
+        <!-- For one pane layout, we don't want the list item to show as selected -->
+    </style>
+
 </resources>
