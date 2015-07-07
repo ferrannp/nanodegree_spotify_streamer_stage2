@@ -20,5 +20,6 @@
     <string name="query_country" translatable="false">country</string>
     <string name="pref_country_key" translatable="false">country_key</string>
     <string name="pref_country_default" translatable="false">US</string>
+    <string name="track_position" translatable="false">track_position</string>
 
 </resources>

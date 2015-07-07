@@ -1,14 +1,16 @@
 package com.fnp.spotifystreamerstage2;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.fnp.spotifystreamerstage2.player.PlayerService;
 
-public class MainActivity extends AppCompatActivity implements NetworkFragment.onArtistsResult,
+
+public class MainActivity extends PlayerServiceActivity implements NetworkFragment.onArtistsResult,
         NetworkFragment.onTracksResult, ArtistFragment.ArtistSelectedCallback {
 
     private static NetworkFragment networkFragment;
@@ -52,6 +54,12 @@ public class MainActivity extends AppCompatActivity implements NetworkFragment.o
         networkFragment.setOnArtistsResult(this);
         if (mTwoPane) {
             MainActivity.getNetworkFragment().setOnTracksResult(this);
+            //Bind to PlayerService
+            Intent intent = new Intent(this, PlayerService.class);
+            bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+            //Broadcast listener for PlayerService
+            mIntentFilterReceiver.addAction(PlayerService.PLAYER_INIT);
+            registerReceiver(mPlayerReceiver, mIntentFilterReceiver);
         }
     }
 
@@ -62,6 +70,14 @@ public class MainActivity extends AppCompatActivity implements NetworkFragment.o
         networkFragment.setOnArtistsResult(null);
         if (mTwoPane) {
             MainActivity.getNetworkFragment().setOnTracksResult(null);
+            //Unbind from the PlayerService
+            if (mBound) {
+                unbindService(mConnection);
+                mBound = false;
+            }
+            //Broadcast listener for PlayerService
+            mIntentFilterReceiver.addAction(PlayerService.PLAYER_INIT);
+            unregisterReceiver(mPlayerReceiver);
         }
     }
 
@@ -100,11 +116,13 @@ public class MainActivity extends AppCompatActivity implements NetworkFragment.o
 
     @Override
     public void onArtistSelected(String id, String name) { //For tablet
+        mArtistSelectedName = name;
+
         if (mTwoPane) {
             Bundle args = new Bundle();
             TopTracksFragment fragment = new TopTracksFragment();
             args.putString(getString(R.string.artist_id), id);
-            args.putString(getString(R.string.artist_name_id), name); //For toolbar subtitle)
+            args.putString(getString(R.string.artist_name_id), name); //For toolbar subtitle
             fragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()

@@ -28,6 +28,9 @@
             android:label="@string/action_settings"
             android:theme="@style/SettingsTheme">
         </activity>
+        <service android:name=".player.PlayerService"
+            android:exported="false">
+        </service>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.fnp.spotifystreamerstage2;
 
+import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +13,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fnp.spotifystreamerstage2.adapters.TopTracksAdapter;
-import com.fnp.spotifystreamerstage2.player.PlayerDialogFragment;
 
 import java.util.List;
 
@@ -25,8 +25,22 @@ public class TopTracksFragment extends Fragment{
     private TextView mWarningTitle, mWarningMessage;
     private String mArtistName;
     private ListView mListView;
+    private TopTracksCallback mTopTracksCallback;
 
     public TopTracksFragment() {
+    }
+
+    public interface TopTracksCallback{
+        void onTrackSelected(int position);
+        int getCurrentTrackPosition();
+        String getSelectedArtistName();
+        boolean isPlayerServiceBound();
+    }
+
+    @Override
+    public void onAttach (Activity activity){
+        super.onAttach(activity);
+        mTopTracksCallback = (TopTracksCallback) getActivity();
     }
 
     @Override
@@ -61,7 +75,7 @@ public class TopTracksFragment extends Fragment{
                 mArtistName = args.getString(getString(R.string.artist_name_id));
             }else  {
                 artistId = ((TopTracksActivity) getActivity()).getArtistId();
-                mArtistName = ((TopTracksActivity) getActivity()).getArtistName();
+                mArtistName = ((TopTracksActivity) getActivity()).getSelectedArtistName();
             }
 
             MainActivity.getNetworkFragment().searchTopTracks(artistId);
@@ -70,10 +84,18 @@ public class TopTracksFragment extends Fragment{
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                PlayerDialogFragment.newInstance()
-                        .show(getActivity().getSupportFragmentManager(), "PlayerDialog");
+                if (mTopTracksCallback != null) {
+                    mTopTracksCallback.onTrackSelected(position);
+                }
+
             }
         });
+    }
+
+    @Override
+    public void onDetach (){
+        super.onDetach();
+        mTopTracksCallback = null;
     }
 
     private void addTopTracks(){
@@ -105,5 +127,4 @@ public class TopTracksFragment extends Fragment{
 
         mWarningView.setVisibility(View.VISIBLE);
     }
-
 }

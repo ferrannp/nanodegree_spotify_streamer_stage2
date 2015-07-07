@@ -1,27 +1,39 @@
 package com.fnp.spotifystreamerstage2;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-public class TopTracksActivity extends AppCompatActivity implements NetworkFragment.onTracksResult {
+import com.fnp.spotifystreamerstage2.player.PlayerService;
 
-    private String artistId, artistName;
-    private TopTracksFragment topTracksFragment;
+public class TopTracksActivity extends PlayerServiceActivity implements
+        NetworkFragment.onTracksResult {
+
+    private String mArtistId;
+    private TopTracksFragment mTopTracksFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_tracks);
 
-        artistId = getIntent().getStringExtra(getString(R.string.artist_id));
-        artistName = getIntent().getStringExtra(getString(R.string.artist_name_id));
+        mArtistId = getIntent().getStringExtra(getString(R.string.artist_id));
+        mArtistSelectedName = getIntent().getStringExtra(getString(R.string.artist_name_id));
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setSubtitle(artistName);
+        getSupportActionBar().setSubtitle(mArtistSelectedName);
 
-        topTracksFragment = (TopTracksFragment)
-                getSupportFragmentManager().findFragmentById(R.id.fragment);
+        if (savedInstanceState == null) {
+            mTopTracksFragment = new TopTracksFragment();
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.content, mTopTracksFragment)
+                    .commit();
+        }else {
+            mTopTracksFragment = (TopTracksFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.content);
+        }
     }
 
     @Override
@@ -29,19 +41,38 @@ public class TopTracksActivity extends AppCompatActivity implements NetworkFragm
         super.onStart();
         //Listener for our NetworkFragment!
         MainActivity.getNetworkFragment().setOnTracksResult(this);
+        //Bind to PlayerService
+        Intent intent = new Intent(this, PlayerService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        //Broadcast listener for PlayerService
+        mIntentFilterReceiver.addAction(PlayerService.PLAYER_INIT);
+        registerReceiver(mPlayerReceiver, mIntentFilterReceiver);
     }
 
     @Override
     public void onStop(){
         super.onStop();
         MainActivity.getNetworkFragment().setOnTracksResult(null); //Stop listening
+        //Unbind from the PlayerService
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
+        //Broadcast listener for PlayerService
+        mIntentFilterReceiver.addAction(PlayerService.PLAYER_INIT);
+        unregisterReceiver(mPlayerReceiver);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: //Back button
-                finish();
+                if(getSupportFragmentManager().getBackStackEntryCount() > 0){
+                //Our PlayerDialogFragment its opened in mobile
+                    getSupportFragmentManager().popBackStack();
+                }else {
+                    finish();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -49,20 +80,20 @@ public class TopTracksActivity extends AppCompatActivity implements NetworkFragm
     }
 
     public String getArtistId(){
-        return artistId;
-    }
-
-    public String getArtistName(){
-        return artistName;
+        return mArtistId;
     }
 
     @Override
     public void onTracksSuccess() {
-        topTracksFragment.onNetworkSuccess();
+        if(mTopTracksFragment != null) {
+            mTopTracksFragment.onNetworkSuccess();
+        }
     }
 
     @Override
     public void onTracksError(String message) {
-        topTracksFragment.onNetworkError(message);
+        if(mTopTracksFragment != null) {
+            mTopTracksFragment.onNetworkError(message);
+        }
     }
 }
