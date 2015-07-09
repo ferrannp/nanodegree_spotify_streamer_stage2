@@ -21,8 +21,9 @@ background was showing transparent -->
 
     <ImageView
         android:id="@+id/album_imageview"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/accessibility_track_thumbnail"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -30,9 +31,74 @@ background was showing transparent -->
         android:gravity="center_horizontal"
         android:src="@drawable/ic_album_white_36dp"/>
 
+    <TextView
+        android:id="@+id/track_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal" />
+
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_gravity="center_horizontal"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/start_time_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+        <TextView
+            android:id="@+id/endt_time_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/previous_button"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_toLeftOf="@+id/play_button"
+            android:layout_toStartOf="@id/play_button"
+            android:contentDescription="@string/accessibility_previous_track"
+            android:src="@android:drawable/ic_media_previous"/>
+
+        <ImageButton
+            android:id="@+id/play_button"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="48dp"
+            android:layout_marginEnd="48dp"
+            android:contentDescription="@string/accessibility_play_track"
+            android:src="@android:drawable/ic_media_play"/>
+
+        <ImageButton
+            android:id="@+id/next_button"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_toRightOf="@id/play_button"
+            android:layout_toEndOf="@id/play_button"
+            android:contentDescription="@string/accessibility_next_track"
+            android:src="@android:drawable/ic_media_next"/>
+    </RelativeLayout>
 
 </LinearLayout>

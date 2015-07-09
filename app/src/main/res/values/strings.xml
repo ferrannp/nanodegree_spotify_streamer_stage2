@@ -6,6 +6,8 @@
     <string name="top_10_tracks">Top 10 Tracks</string>
     <string name="no_results_found">No results found for "\u0022"%1$s"\u0022"</string>
     <string name="refine_search">Please refine your search.</string>
+    <string name="now_playing">Now playing</string>
+    <string name="error_player_data">Error retrieving data. Please check your connection.</string>
 
     <!-- Preferences -->
     <string name="pref_country_label">Top tracks country</string>
@@ -13,6 +15,9 @@
     <!-- Accesibility -->
     <string name="accessibility_artist_thumbnail">This is the artist cover thumbnail image.</string>
     <string name="accessibility_track_thumbnail">This is the album thumbnail.</string>
+    <string name="accessibility_previous_track">Previous track button.</string>
+    <string name="accessibility_play_track">Play track button.</string>
+    <string name="accessibility_next_track">Stop track button.</string>
 
     <!-- No translatable -->
     <string name="artist_id" translatable="false">artist_id</string>
@@ -21,5 +26,8 @@
     <string name="pref_country_key" translatable="false">country_key</string>
     <string name="pref_country_default" translatable="false">US</string>
     <string name="track_position" translatable="false">track_position</string>
+    <string name="is_playing" translatable="false">is_playing</string>
+    <string name="unbind_player" translatable="false">unbind_player</string>
+    <string name="preview_url" translatable="false">preview_url</string>
 
 </resources>

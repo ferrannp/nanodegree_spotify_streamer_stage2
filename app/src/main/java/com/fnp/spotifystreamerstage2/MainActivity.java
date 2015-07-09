@@ -54,12 +54,12 @@ public class MainActivity extends PlayerServiceActivity implements NetworkFragme
         networkFragment.setOnArtistsResult(this);
         if (mTwoPane) {
             MainActivity.getNetworkFragment().setOnTracksResult(this);
+            //Broadcast listener for PlayerService
+            mIntentFilterReceiver.addAction(PlayerService.PLAYER_ACTION);
+            registerReceiver(mPlayerReceiver, mIntentFilterReceiver);
             //Bind to PlayerService
             Intent intent = new Intent(this, PlayerService.class);
             bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-            //Broadcast listener for PlayerService
-            mIntentFilterReceiver.addAction(PlayerService.PLAYER_INIT);
-            registerReceiver(mPlayerReceiver, mIntentFilterReceiver);
         }
     }
 
@@ -70,14 +70,14 @@ public class MainActivity extends PlayerServiceActivity implements NetworkFragme
         networkFragment.setOnArtistsResult(null);
         if (mTwoPane) {
             MainActivity.getNetworkFragment().setOnTracksResult(null);
+            //Broadcast listener for PlayerService
+            mIntentFilterReceiver.addAction(PlayerService.PLAYER_ACTION);
+            unregisterReceiver(mPlayerReceiver);
             //Unbind from the PlayerService
             if (mBound) {
                 unbindService(mConnection);
                 mBound = false;
             }
-            //Broadcast listener for PlayerService
-            mIntentFilterReceiver.addAction(PlayerService.PLAYER_INIT);
-            unregisterReceiver(mPlayerReceiver);
         }
     }
 

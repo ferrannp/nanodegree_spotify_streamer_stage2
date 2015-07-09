@@ -10,6 +10,7 @@ import com.fnp.spotifystreamerstage2.player.PlayerService;
 public class TopTracksActivity extends PlayerServiceActivity implements
         NetworkFragment.onTracksResult {
 
+    private static final String TOP_TRACK_FRAGMENT = "TopTrackFragment";
     private String mArtistId;
     private TopTracksFragment mTopTracksFragment;
 
@@ -28,11 +29,11 @@ public class TopTracksActivity extends PlayerServiceActivity implements
             mTopTracksFragment = new TopTracksFragment();
 
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.content, mTopTracksFragment)
+                    .add(R.id.content, mTopTracksFragment, TOP_TRACK_FRAGMENT)
                     .commit();
         }else {
             mTopTracksFragment = (TopTracksFragment)
-                    getSupportFragmentManager().findFragmentById(R.id.content);
+                    getSupportFragmentManager().findFragmentByTag(TOP_TRACK_FRAGMENT);
         }
     }
 
@@ -45,7 +46,7 @@ public class TopTracksActivity extends PlayerServiceActivity implements
         Intent intent = new Intent(this, PlayerService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         //Broadcast listener for PlayerService
-        mIntentFilterReceiver.addAction(PlayerService.PLAYER_INIT);
+        mIntentFilterReceiver.addAction(PlayerService.PLAYER_ACTION);
         registerReceiver(mPlayerReceiver, mIntentFilterReceiver);
     }
 
@@ -59,7 +60,7 @@ public class TopTracksActivity extends PlayerServiceActivity implements
             mBound = false;
         }
         //Broadcast listener for PlayerService
-        mIntentFilterReceiver.addAction(PlayerService.PLAYER_INIT);
+        mIntentFilterReceiver.addAction(PlayerService.PLAYER_ACTION);
         unregisterReceiver(mPlayerReceiver);
     }
 

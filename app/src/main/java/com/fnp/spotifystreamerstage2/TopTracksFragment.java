@@ -34,7 +34,6 @@ public class TopTracksFragment extends Fragment{
         void onTrackSelected(int position);
         int getCurrentTrackPosition();
         String getSelectedArtistName();
-        boolean isPlayerServiceBound();
     }
 
     @Override
