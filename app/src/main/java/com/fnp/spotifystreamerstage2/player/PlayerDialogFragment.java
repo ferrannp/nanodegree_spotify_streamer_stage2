@@ -38,13 +38,8 @@ public class PlayerDialogFragment extends DialogFragment implements View.OnClick
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_player, container, false);
+        View view = inflater.inflate(R.layout.fragment_player_main, container, false);
 
         TextView mArtistTitle = (TextView) view.findViewById(R.id.artist_textview);
         mAlbumTitle = (TextView) view.findViewById(R.id.album_textview);
@@ -56,6 +51,10 @@ public class PlayerDialogFragment extends DialogFragment implements View.OnClick
         mSeekBar = (SeekBar) view.findViewById(R.id.seekBar);
 
         mSeekBar.setOnSeekBarChangeListener(this);
+        if(savedInstanceState != null){ //Restore seekbar and start - end time
+            mTotalDuration = savedInstanceState.getInt(getString(R.string.track_duration));
+            updateDuration(mTotalDuration);
+        }
 
         NetworkFragment networkFragment = MainActivity.getNetworkFragment();
         PlayerServiceActivity activity = ((PlayerServiceActivity) getActivity());
@@ -75,6 +74,13 @@ public class PlayerDialogFragment extends DialogFragment implements View.OnClick
 
         return view;
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt(getString(R.string.track_duration), mTotalDuration);
+    }
+
 
     private void updateDynamicView(Track track){
         //Load cover

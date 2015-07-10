@@ -241,6 +241,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
                 Intent intent = new Intent();
                 intent.setAction(PLAYER_ACTION);
                 intent.putExtra(getString(R.string.is_playing), false);
+                intent.putExtra(getString(R.string.track_elapsed), 0);
                 sendBroadcast(intent);
                 stopSelf(); //Stop service
             }

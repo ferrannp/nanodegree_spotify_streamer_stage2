@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?><!-- I am setting the background here because in mobile (with full screen technique), the
+background was showing transparent -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingEnd="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingStart="16dp"
+    android:paddingTop="10dp"
+    android:gravity="center_vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/album_imageview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/accessibility_track_thumbnail"
+            android:layout_gravity="center"
+            android:scaleType="centerInside"
+            android:paddingEnd="8dp"
+            android:paddingRight="8dp"
+            android:src="@drawable/ic_album_white_36dp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/artist_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:id="@+id/album_textview"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp" />
+
+            <TextView
+                android:id="@+id/track_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center_horizontal"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/start_time_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"/>
+
+                <TextView
+                    android:id="@+id/endt_time_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/previous_button"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_toLeftOf="@+id/play_button"
+                    android:layout_toStartOf="@id/play_button"
+                    android:contentDescription="@string/accessibility_previous_track"
+                    android:src="@android:drawable/ic_media_previous"/>
+
+                <ImageButton
+                    android:id="@+id/play_button"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="48dp"
+                    android:layout_marginEnd="48dp"
+                    android:contentDescription="@string/accessibility_play_track"
+                    android:src="@android:drawable/ic_media_play"/>
+
+                <ImageButton
+                    android:id="@+id/next_button"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_toRightOf="@id/play_button"
+                    android:layout_toEndOf="@id/play_button"
+                    android:contentDescription="@string/accessibility_next_track"
+                    android:src="@android:drawable/ic_media_next"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--<ImageView-->
+    <!--android:id="@+id/album_imageview"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_marginBottom="8dp"-->
+    <!--android:layout_marginTop="8dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:contentDescription="@string/accessibility_track_thumbnail"-->
+    <!--android:gravity="center_horizontal"-->
+    <!--android:scaleType="centerInside"-->
+    <!--android:src="@drawable/ic_album_white_36dp" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/track_textview"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:gravity="center_horizontal" />-->
+
+    <!--<SeekBar-->
+    <!--android:id="@+id/seekBar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center_horizontal"-->
+    <!--android:layout_marginTop="8dp" />-->
+
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center_horizontal"-->
+    <!--android:orientation="horizontal">-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/start_time_textview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:layout_alignParentStart="true" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/endt_time_textview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_alignParentRight="true" />-->
+
+    <!--</RelativeLayout>-->
+
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center_horizontal"-->
+    <!--android:orientation="horizontal">-->
+
+    <!--<ImageButton-->
+    <!--android:id="@+id/previous_button"-->
+    <!--android:layout_width="56dp"-->
+    <!--android:layout_height="56dp"-->
+    <!--android:layout_toLeftOf="@+id/play_button"-->
+    <!--android:layout_toStartOf="@id/play_button"-->
+    <!--android:contentDescription="@string/accessibility_previous_track"-->
+    <!--android:src="@android:drawable/ic_media_previous" />-->
+
+    <!--<ImageButton-->
+    <!--android:id="@+id/play_button"-->
+    <!--android:layout_width="56dp"-->
+    <!--android:layout_height="56dp"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:layout_marginEnd="48dp"-->
+    <!--android:layout_marginStart="48dp"-->
+    <!--android:contentDescription="@string/accessibility_play_track"-->
+    <!--android:src="@android:drawable/ic_media_play" />-->
+
+    <!--<ImageButton-->
+    <!--android:id="@+id/next_button"-->
+    <!--android:layout_width="56dp"-->
+    <!--android:layout_height="56dp"-->
+    <!--android:layout_toEndOf="@id/play_button"-->
+    <!--android:layout_toRightOf="@id/play_button"-->
+    <!--android:contentDescription="@string/accessibility_next_track"-->
+    <!--android:src="@android:drawable/ic_media_next" />-->
+    <!--</RelativeLayout>-->
+
+</LinearLayout>
