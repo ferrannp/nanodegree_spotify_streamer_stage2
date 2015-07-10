@@ -2,11 +2,13 @@ package com.fnp.spotifystreamerstage2.player;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.fnp.spotifystreamerstage2.MainActivity;
@@ -20,13 +22,16 @@ import java.util.List;
 import kaaes.spotify.webapi.android.models.Image;
 import kaaes.spotify.webapi.android.models.Track;
 
-public class PlayerDialogFragment extends DialogFragment implements View.OnClickListener{
+public class PlayerDialogFragment extends DialogFragment implements View.OnClickListener,
+        SeekBar.OnSeekBarChangeListener{
 
     public static final String TAG = "PlayerDialogFragment";
-    private int mCurrentTrackPosition;
     private TextView mAlbumTitle, mTrackTitle, mStartTime, mEndTime;
     private ImageView mAlbumImage;
     private ImageButton mPlayButton;
+    private SeekBar mSeekBar;
+    private boolean mIgnoreTimer = false;
+    private int mTotalDuration;
 
     public static PlayerDialogFragment newInstance() {
         return new PlayerDialogFragment();
@@ -48,12 +53,15 @@ public class PlayerDialogFragment extends DialogFragment implements View.OnClick
         mStartTime = (TextView) view.findViewById(R.id.start_time_textview);
         mEndTime = (TextView) view.findViewById(R.id.endt_time_textview);
         mPlayButton = (ImageButton) view.findViewById(R.id.play_button);
+        mSeekBar = (SeekBar) view.findViewById(R.id.seekBar);
+
+        mSeekBar.setOnSeekBarChangeListener(this);
 
         NetworkFragment networkFragment = MainActivity.getNetworkFragment();
         PlayerServiceActivity activity = ((PlayerServiceActivity) getActivity());
 
-        mCurrentTrackPosition = activity.getCurrentTrackPosition();
-        Track track = networkFragment.getTopTracksList().get(mCurrentTrackPosition);
+        int currentTrackPosition = activity.getCurrentTrackPosition();
+        Track track = networkFragment.getTopTracksList().get(currentTrackPosition);
 
         mArtistTitle.setText(activity.getSelectedArtistName());
         updateDynamicView(track);
@@ -78,32 +86,20 @@ public class PlayerDialogFragment extends DialogFragment implements View.OnClick
         //Load data (text)
         mAlbumTitle.setText(track.album.name);
         mTrackTitle.setText(track.name);
-        mStartTime.setText("00:00"); //Start from 0
-        mEndTime.setText("--:--"); //We will get it from PlayerService when we load the preview_url
     }
 
     @Override
     public void onClick(View v) {
         PlayerInterface activity = (PlayerInterface) getActivity();
-        List<Track> topTrackList = MainActivity.getNetworkFragment().getTopTracksList();
         switch (v.getId()) {
             case R.id.previous_button:
-                mCurrentTrackPosition--;
-                if(mCurrentTrackPosition < 0){
-                    mCurrentTrackPosition = topTrackList.size() - 1;
-                }
-                updateDynamicView(topTrackList.get(mCurrentTrackPosition));
-                activity.playSong(mCurrentTrackPosition);
+                activity.previousSong();
                 break;
             case R.id.play_button:
-                activity.playSong(mCurrentTrackPosition);
-
+                activity.playSong();
                 break;
             case R.id.next_button:
-                mCurrentTrackPosition = (mCurrentTrackPosition + 1)
-                        % MainActivity.getNetworkFragment().getTopTracksList().size();
-                updateDynamicView(topTrackList.get(mCurrentTrackPosition));
-                activity.playSong(mCurrentTrackPosition);
+                activity.nextSong();
                 break;
         }
     }
@@ -116,5 +112,62 @@ public class PlayerDialogFragment extends DialogFragment implements View.OnClick
             mPlayButton.setImageDrawable(getResources()
                     .getDrawable(android.R.drawable.ic_media_play));
         }
+    }
+
+    public void updateViewFromService(int position){
+        List<Track> topTrackList = MainActivity.getNetworkFragment().getTopTracksList();
+        updateDynamicView(topTrackList.get(position));
+    }
+
+    /** Seekbar operations and control */
+
+    /**
+     * @param duration in milliseconds
+     */
+    public void updateDuration(int duration){
+        mEndTime.setText(String.format("%02d:%02d", ((duration / (1000*60)) % 60),
+                (duration / 1000) % 60));
+
+        mTotalDuration = duration;
+        mSeekBar.setMax(duration / 1000);
+    }
+
+    /**
+     * Position of the seekbar updated by {@link PlayerService}
+     * @param elapsed time in milliseconds
+     */
+    public void updateElapsed(int elapsed){
+        if(!mIgnoreTimer) {
+            mStartTime.setText(String.format("%02d:%02d", ((elapsed / (1000 * 60)) % 60),
+                    (elapsed / 1000) % 60));
+            mSeekBar.setProgress(elapsed / 1000);
+        }
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if(fromUser) {
+            int elapsed = progressToMilliseconds();
+            Log.d("Player elapsed: ", String.valueOf(elapsed));
+            mStartTime.setText(String.format("%02d:%02d", ((elapsed / (1000 * 60)) % 60),
+                    (elapsed / 1000) % 60));
+        }
+    }
+
+    public int progressToMilliseconds() {
+        double val=((double)mSeekBar.getProgress())/((double)mSeekBar.getMax());
+        return (int) (val * mTotalDuration);
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        mIgnoreTimer = true; //Or user will be very angry :)
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        ((PlayerInterface) getActivity()).seekSong(seekBar.getProgress());
+        mIgnoreTimer = false;
     }
 }

@@ -6,8 +6,11 @@
     <string name="top_10_tracks">Top 10 Tracks</string>
     <string name="no_results_found">No results found for "\u0022"%1$s"\u0022"</string>
     <string name="refine_search">Please refine your search.</string>
-    <string name="now_playing">Now playing</string>
     <string name="error_player_data">Error retrieving data. Please check your connection.</string>
+    <string name="action_play">Play</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_previous">Previous</string>
+    <string name="action_next">Next</string>
 
     <!-- Preferences -->
     <string name="pref_country_label">Top tracks country</string>
@@ -26,8 +29,9 @@
     <string name="pref_country_key" translatable="false">country_key</string>
     <string name="pref_country_default" translatable="false">US</string>
     <string name="track_position" translatable="false">track_position</string>
+    <string name="track_duration" translatable="false">track_duration</string>
+    <string name="track_elapsed" translatable="false">track_elapsed</string>
     <string name="is_playing" translatable="false">is_playing</string>
-    <string name="unbind_player" translatable="false">unbind_player</string>
-    <string name="preview_url" translatable="false">preview_url</string>
+    <string name="player_tracks" translatable="false">player_tracks</string>
 
 </resources>
