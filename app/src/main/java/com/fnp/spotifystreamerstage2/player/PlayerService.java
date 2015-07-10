@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
@@ -14,6 +15,7 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.preference.PreferenceManager;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v7.app.NotificationCompat;
@@ -227,11 +229,11 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
 
                 mPlayerHandler.removeCallbacksAndMessages(true);
 
-                if(mMediaPlayer != null && mCurrentPlayerState == STATE_READY){
+                if (mMediaPlayer != null && mCurrentPlayerState == STATE_READY) {
                     mMediaPlayer.stop();
                 }
                 mCurrentPlayerState = STATE_STOP;
-                if(mMediaPlayer != null){
+                if (mMediaPlayer != null) {
                     mMediaPlayer.reset();
                     mMediaPlayer.release();
                     mMediaPlayer = null;
@@ -384,6 +386,16 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         builder.addAction(generateAction(android.R.drawable.ic_media_next,
                 getString(R.string.action_next), ACTION_NEXT));
         style.setShowActionsInCompactView(0, 1, 2);
+
+        //Notification visibility (show controls on the lock screen or not)
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean show = prefs.getBoolean(getString(R.string.pref_notif_key), true);
+        if(show){
+            builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+        }
+        else{
+            builder.setVisibility(NotificationCompat.VISIBILITY_PRIVATE);
+        }
 
         Picasso.Builder picassoBuilder = new Picasso.Builder(this);
 

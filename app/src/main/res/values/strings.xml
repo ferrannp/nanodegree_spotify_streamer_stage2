@@ -14,6 +14,9 @@
 
     <!-- Preferences -->
     <string name="pref_country_label">Top tracks country</string>
+    <string name="pref_notif_label">Show controls on the lock screen</string>
+    <string name="pref_notif_category_label">Notification</string>
+    <string name="pref_notif_category_summary">This will only work if you activate \'Hide sensitive notification content\' option in your phone settings.</string>
 
     <!-- Accesibility -->
     <string name="accessibility_artist_thumbnail">This is the artist cover thumbnail image.</string>
@@ -28,6 +31,8 @@
     <string name="query_country" translatable="false">country</string>
     <string name="pref_country_key" translatable="false">country_key</string>
     <string name="pref_country_default" translatable="false">US</string>
+    <string name="pref_notif_key" translatable="false">pref_notif_key</string>
+    <string name="pref_notif_category_key" translatable="false">pref_notif_category_key</string>
     <string name="track_position" translatable="false">track_position</string>
     <string name="track_duration" translatable="false">track_duration</string>
     <string name="track_elapsed" translatable="false">track_elapsed</string>
