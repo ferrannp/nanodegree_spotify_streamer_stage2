@@ -371,8 +371,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         intent.setAction(ACTION_STOP);
         PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 1,
                 intent, 0);
-        final android.support.v7.app.NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(this);
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
 
         builder.setContentTitle(playerTrack.getName());
         builder.setContentText(playerTrack.getAlbum_name());

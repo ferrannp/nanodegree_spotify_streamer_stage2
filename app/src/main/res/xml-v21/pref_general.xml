@@ -14,4 +14,15 @@
         android:singleLine="true"
         android:maxLength="2"/>
 
+    <PreferenceCategory
+        android:key="@string/pref_notif_category_key"
+        android:title="@string/pref_notif_category_label">
+
+    <SwitchPreference
+        android:title="@string/pref_notif_label"
+        android:key="@string/pref_notif_key"
+        android:summary="@string/pref_notif_category_summary"
+        android:defaultValue="true"/>
+    </PreferenceCategory>
+
 </PreferenceScreen>

@@ -85,7 +85,6 @@ public class PlayerServiceActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         mIsLargeLayout = getResources().getBoolean(R.bool.dialog_fragment_large_layout);
         if (savedInstanceState != null) {
-            //mCurrentTrackPosition = savedInstanceState.getInt(getString(R.string.track_position));
             mArtistSelectedName = savedInstanceState.getString(getString(R.string.artist_name_id));
         }
     }
@@ -93,7 +92,6 @@ public class PlayerServiceActivity extends AppCompatActivity implements
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        //savedInstanceState.putInt(getString(R.string.track_position), mCurrentTrackPosition);
         savedInstanceState.putString(getString(R.string.artist_name_id), mArtistSelectedName);
     }
 
