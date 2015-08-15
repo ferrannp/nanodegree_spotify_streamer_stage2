@@ -60,10 +60,16 @@ public class PlayerDialogFragment extends DialogFragment implements View.OnClick
         PlayerServiceActivity activity = ((PlayerServiceActivity) getActivity());
 
         int currentTrackPosition = activity.getCurrentTrackPosition();
-        Track track = networkFragment.getTopTracksList().get(currentTrackPosition);
 
-        mArtistTitle.setText(activity.getSelectedArtistName());
-        updateDynamicView(track);
+        // Service could be running and playing but we could also have stopped the app long ago.
+        // We can open again the player using "NOW PLAYING" button but we don't have the cover
+        // anymore (we would need to save or fetch the image again) but for the purpose of this app
+        // this is ok for now
+        if(networkFragment.getTopTracksList().size() > 0) {
+            Track track = networkFragment.getTopTracksList().get(currentTrackPosition);
+            mArtistTitle.setText(activity.getSelectedArtistName());
+            updateDynamicView(track);
+        }
 
         togglePlayButton(activity.isPlaying());
 
@@ -73,6 +79,15 @@ public class PlayerDialogFragment extends DialogFragment implements View.OnClick
         view.findViewById(R.id.next_button).setOnClickListener(this);
 
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        if(mTotalDuration == 0){
+            mTotalDuration = ((PlayerServiceActivity)getActivity()).getDuration();
+            updateDuration(mTotalDuration);
+        }
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -122,7 +137,13 @@ public class PlayerDialogFragment extends DialogFragment implements View.OnClick
 
     public void updateViewFromService(int position){
         List<Track> topTrackList = MainActivity.getNetworkFragment().getTopTracksList();
-        updateDynamicView(topTrackList.get(position));
+        // Service could be running and playing but we could also stopped the app long ago.
+        // We can open again the player using "NOW PLAYING" button but we don't have the cover
+        // anymore (we would need to save or fetch the image again) but for the purpose of this app
+        // this is ok for now
+        if(topTrackList.size() > 0) {
+            updateDynamicView(topTrackList.get(position));
+        }
     }
 
     /** Seekbar operations and control */

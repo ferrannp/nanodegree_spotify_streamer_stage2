@@ -7,4 +7,5 @@ public interface PlayerInterface {
     void previousSong();
     void seekSong(int elapsed);
     boolean isPlaying();
+    int getDuration();
 }

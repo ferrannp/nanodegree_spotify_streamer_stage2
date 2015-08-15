@@ -40,11 +40,11 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     private List<PlayerTrack> mPlayerTrackList;
     private Target mTarget;
 
-    private static final int STATE_IDLE = -1;
-    private static final int STATE_PREPARED = 0;
-    private static final int STATE_READY = 1;
-    private static final int STATE_PAUSE = 2;
-    private static final int STATE_STOP = 3;
+    public static final int STATE_IDLE = 100;
+    public static final int STATE_PREPARED = 0;
+    public static final int STATE_READY = 1;
+    public static final int STATE_PAUSE = 2;
+    public static final int STATE_STOP = 3;
     private int mCurrentPlayerState = STATE_IDLE;
     private String mCurrentTrackUrl = "";
     private int mCurrentTrackPosition;
@@ -232,7 +232,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
                 if (mMediaPlayer != null && mCurrentPlayerState == STATE_READY) {
                     mMediaPlayer.stop();
                 }
-                mCurrentPlayerState = STATE_STOP;
+                mCurrentPlayerState = STATE_IDLE;
                 if (mMediaPlayer != null) {
                     mMediaPlayer.reset();
                     mMediaPlayer.release();
@@ -242,6 +242,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
                 intent.setAction(PLAYER_ACTION);
                 intent.putExtra(getString(R.string.is_playing), false);
                 intent.putExtra(getString(R.string.track_elapsed), 0);
+                intent.putExtra(getString(R.string.player_state), mCurrentPlayerState);
                 sendBroadcast(intent);
                 stopSelf(); //Stop service
             }
@@ -254,6 +255,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         Intent intent = new Intent();
         intent.setAction(PLAYER_ACTION);
         intent.putExtra(getString(R.string.track_duration), mMediaPlayer.getDuration());
+        intent.putExtra(getString(R.string.player_state), mCurrentPlayerState);
         sendBroadcast(intent);
         playSong(mCurrentTrackUrl);
     }
@@ -299,19 +301,11 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     private void setDataSong(String url){
         try {
             mMediaPlayer.setDataSource(this, Uri.parse(url));
-            mMediaPlayer.prepare();
-
-            Intent intent = new Intent();
-            intent.setAction(PLAYER_ACTION);
-            intent.putExtra(getString(R.string.track_duration), mMediaPlayer.getDuration());
-            sendBroadcast(intent);
+            mMediaPlayer.prepareAsync(); //In this way we avoid blocking the UI thread
         } catch (IOException e) {
             Toast.makeText(this, getString(R.string.error_player_data), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
-            return;
         }
-
-        mCurrentPlayerState = STATE_PREPARED;
     }
 
     private void pauseSong(){
@@ -435,4 +429,18 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         }
         return super.onUnbind(intent);
     }
+
+    public int getState(){
+        return mCurrentPlayerState;
+    }
+
+    public int getDuration(){
+        if(mMediaPlayer != null){
+            return mMediaPlayer.getDuration();
+        }else{
+            return -1;
+        }
+    }
+
+
 }

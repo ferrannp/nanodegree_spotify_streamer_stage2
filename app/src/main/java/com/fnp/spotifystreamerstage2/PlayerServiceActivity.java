@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.fnp.spotifystreamerstage2.player.PlayerDialogFragment;
 import com.fnp.spotifystreamerstage2.player.PlayerInterface;
@@ -74,6 +76,12 @@ public class PlayerServiceActivity extends AppCompatActivity implements
                             fragment.updateElapsed(elapsed);
                         }
 
+                        int state = intent.getIntExtra(getString(R.string.player_state), -1);
+                        if(mIsLargeLayout && state == PlayerService.STATE_PREPARED
+                                || state == PlayerService.STATE_IDLE){
+                            supportInvalidateOptionsMenu(); //For the "Now playing" button
+                        }
+
                         break;
                 }
             }
@@ -93,6 +101,29 @@ public class PlayerServiceActivity extends AppCompatActivity implements
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putString(getString(R.string.artist_name_id), mArtistSelectedName);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if(mIsLargeLayout && mPlayerService != null
+                && mPlayerService.getState() != PlayerService.STATE_IDLE){
+            menu.findItem(R.id.action_now_playing).setVisible(true);
+        }else if(mIsLargeLayout){
+            menu.findItem(R.id.action_now_playing).setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_now_playing:
+                showPlayer();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     //Defines callbacks for service binding, passed to bindService()
@@ -219,5 +250,14 @@ public class PlayerServiceActivity extends AppCompatActivity implements
     @Override
     public boolean isPlaying() {
         return mPlayerService != null && mPlayerService.isPlaying();
+    }
+
+    @Override
+    public int getDuration(){
+        if(mPlayerService != null){
+            return mPlayerService.getDuration();
+        }else{
+            return -1;
+        }
     }
 }
